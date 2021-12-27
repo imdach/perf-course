@@ -1,0 +1,16 @@
+%{
+#include <linux/list.h>
+#include <linux/sched.h>
+%}
+
+function process_list ()
+%{
+    struct task_struct *p;
+    for_each_process(p) {
+        _stp_printf("process: %s, pid: %d\n", p->comm, p->pid, p->);
+    }
+%}
+probe begin {
+    process_list();
+    exit();
+}

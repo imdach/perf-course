@@ -1,0 +1,47 @@
+
+#! /usr/bin/env stap
+global fault_begin_time // 记录 pagefault 发生的时间
+global fault_address    // 记录 pagefault 发生的地址
+global fault_access     // 记录 pagefault 是不是 write access
+
+probe begin { printf("pagefault probe begin...\n") }
+
+probe vm.pagefault {
+  if (pid() == target() || ppid() == target()) {
+      fault_begin_time = gettimeofday_s()
+      // address 表示发生 pagefault 时的地址
+      fault_address = address 
+      // write_access 表示这次 pagefault 是不是一次 write access, 1 表示 write，0 表示 read
+      fault_access = write_access
+  } 
+} 
+function vm_fault_str(fault_type: long) {
+    if(vm_fault_contains(fault_type, VM_FAULT_OOM))
+        return "OOM";
+    else if(vm_fault_contains(fault_type, VM_FAULT_SIGBUS))
+        return "SIGBUS";
+    else if(vm_fault_contains(fault_type, VM_FAULT_MINOR))
+        return "MINOR";
+    else if(vm_fault_contains(fault_type, VM_FAULT_MAJOR))
+        return "MAJOR";
+    else if(vm_fault_contains(fault_type, VM_FAULT_NOPAGE))
+        return "NOPAGE";
+    else if(vm_fault_contains(fault_type, VM_FAULT_LOCKED))
+        return "LOCKED";
+    else if(vm_fault_contains(fault_type, VM_FAULT_ERROR))
+        return "ERROR";
+    return "???";
+} 
+                
+probe vm.pagefault.return {
+  if (pid() == target() || ppid() == target()) {
+    printf("[%s] pid:%d, address:%p access:%s, type:%s\n",
+          ctime(fault_begin_time), // time
+          pid(),                              // pid
+          fault_address,           // address
+          fault_access ? "w" : "r",// write、read access
+          vm_fault_str(fault_type)          // minor、major
+    )
+ //   print_backtrace()
+  }
+}
