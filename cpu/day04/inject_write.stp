@@ -1,0 +1,9 @@
+probe begin {
+  printf("probe begin... \n")
+}
+
+probe syscall.write.return {
+  if (pid() == $1) {
+    $return = -28
+  }
+}

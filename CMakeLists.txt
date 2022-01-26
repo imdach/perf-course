@@ -9,4 +9,4 @@ add_executable(perf_course cpu/practice/cpu_01.c cpu/practice/d_state/my_char_de
         toy_docker/step_network/lxc_network/network.h
         toy_docker/step_network/lxc_network/nl.c
         toy_docker/step_network/lxc_network/nl.h
-        )
+        cpu/day04/flame_test.c cpu/day04/off_cpu_flame_test.c cpu/day05/context_switch_test.c cpu/day06/cache_false_sharing.c cpu/day06/array_traverse_test.c cpu/day07/ucontext_test.c)

@@ -1,0 +1,9 @@
+probe begin { 
+    log("begin to probe\n")
+}
+
+probe signal.send {
+    if (sig_name == "SIGKILL") {
+        printf("process %s(pid:%d) is killed by %s(%d) using signal %s\n", pid_name, sig_pid, execname(), uid(), sig_name)
+    }
+}

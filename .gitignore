@@ -2,3 +2,4 @@
 cmake-build-debug/
 tmp/
 .DS_Store
+a.out

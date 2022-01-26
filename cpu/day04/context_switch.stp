@@ -1,0 +1,25 @@
+global csw_count
+ 
+probe scheduler.cpu_off {
+      csw_count[task_prev, task_next]++
+}
+ 
+ 
+function fmt_task(task_prev, task_next) {
+    return sprintf("tid(%d)->tid(%d)", task_tid(task_prev), task_tid(task_next))
+}
+ 
+function print_context_switch_top5 () {
+  printf ("%45s %10s\n", "Context switch", "COUNT")
+  foreach ([task_prev, task_next] in csw_count- limit 5) {
+    printf("%45s %10d\n", fmt_task(task_prev, task_next), csw_count[task_prev, task_next])
+  }
+ 
+  delete csw_count
+}
+ 
+probe timer.s(1) {
+  print_context_switch_top5()
+  printf("--------------------------------------------------------------\n")
+}
+
