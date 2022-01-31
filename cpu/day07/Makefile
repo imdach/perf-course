@@ -6,19 +6,20 @@ else
 endif
 	rm -f *.o *.S
 
-cache_line_test:clean
-	gcc -std=c99 cache_line_test.c -o cache_line_test
+ucontext_test:clean
+	gcc ucontext_test.c -o ucontext_test
 
-array_test:clean
-	gcc -std=c99 array_test.c -o array_test
+ucontext_test_2:clean
+	gcc ucontext_test_2.c -o ucontext_test_2
 
-cache_false_sharing:clean
-	gcc -std=c99 cache_false_sharing.c -lpthread -o cache_false_sharing
-	gcc -DENABLE=1 -std=c99 cache_false_sharing.c -lpthread -o cache_false_sharing_2
+ucontext_test_3:clean
+	gcc ucontext_test_3.c -o ucontext_test_3
 
+ucontext_test_4:clean
+	gcc ucontext_test_4.c -o ucontext_test_4
 
-cache_line_size_test:clean
-	gcc -std=c99 cache_line_size_test.c -lpthread -o cache_line_size_test
+coroutine_test:clean
+	gcc coroutine_test.c coroutine/coroutine.c coroutine/coroutine.h -o coroutine_test
 
-array_traverse:clean
-	g++ array_traverse.cpp -o array_traverse
+ my_coroutine:clean
+	gcc my_coroutine.c pqueue.c pqueue.h -o my_coroutine
