@@ -3,3 +3,5 @@ cmake-build-debug/
 tmp/
 .DS_Store
 a.out
+target
+*.class
